@@ -61,8 +61,14 @@ def main():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
+                'credentials.json', SCOPES, redirect_uri='http://localhost:8080/')
+            auth_url, _ = flow.authorization_url(prompt='consent')
+
+            print('以下のURLにアクセスして認証コードを取得し、ここに入力してください:')
+            print(auth_url)
+            code = input('認証コードを入力してください: ')
+            flow.fetch_token(code=code)
+            creds = flow.credentials
         # トークンを保存
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
