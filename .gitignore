@@ -1,0 +1,15 @@
+# 環境設定ファイル
+.env
+
+# トークン情報などの認証ファイル
+token.json
+credentials.json
+
+# Python環境
+venv/
+__pycache__/
+*.pyc
+
+# 一時ファイル
+events.json
+last_check.txt
