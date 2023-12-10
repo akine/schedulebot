@@ -58,7 +58,11 @@ def main():
     # 有効な認証情報がない場合は新規に取得
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+            try:
+                creds.refresh(Request())
+            except Exception as e:
+                print(f"トークンのリフレッシュ中にエラーが発生しました: {e}")
+                return
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials.json', SCOPES, redirect_uri='http://localhost:8080/')
@@ -69,6 +73,7 @@ def main():
             code = input('認証コードを入力してください: ')
             flow.fetch_token(code=code)
             creds = flow.credentials
+
         # トークンを保存
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
